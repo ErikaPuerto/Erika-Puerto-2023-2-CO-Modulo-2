@@ -17,8 +17,10 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
+
         self.sound = pygame.mixer.music.load("xstep.ogg")
         pygame.mixer.music.play(-1)
+
 
     def run(self):
         # Game loop: events - update - draw
