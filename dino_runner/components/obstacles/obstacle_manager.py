@@ -25,7 +25,7 @@ class ObstacleManager:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
                 print("Collision")
-                pygame.time.delay(1000)
+                pygame.time.delay(3000)
                 game.playing = False
                 break
 

@@ -3,6 +3,8 @@ import pygame
 from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.menu import Menu
+
 
 class Game:
     def __init__(self):
@@ -17,11 +19,18 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
-
+        self.menu = Menu("Press any key to start...", self.screen)
         self.sound = pygame.mixer.music.load("xstep.ogg")
         pygame.mixer.music.play(-1)
 
-
+    def execute(self):
+        self.running = True
+        while self.running:
+            if not self.playing:
+                self.show_menu()
+        pygame.display.quit()
+        pygame.quit()
+    
     def run(self):
         # Game loop: events - update - draw
         self.playing = True
