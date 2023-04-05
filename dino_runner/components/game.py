@@ -91,6 +91,7 @@ class Game:
         else: 
             self.menu.update_message("new message")
             self.menu.draw(self.screen)
+            
         self.screen.blit(ICON, (half_screen_widht - 50, half_screen_height - 140))
         self.menu.update(self)
     
