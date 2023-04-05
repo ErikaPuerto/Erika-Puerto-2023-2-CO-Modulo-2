@@ -19,7 +19,7 @@ class Menu:
         self.handle_events_on_menu(game)
 
     def draw(self,screen):
-         screen.blit(self.text, self.text_rect)
+        screen.blit(self.text, self.text_rect)
 
     def reset_screen_color(self,screen):
          screen.fill((255, 255, 255))
@@ -33,6 +33,6 @@ class Menu:
                     game.run()
 
     def update_message(self, message):
-         self.text = self.font.render(message, True, (0,0,0))
-         self.text_rect = self.text.get_rect()
-         self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
+        self.text = self.font.render(message, True, (0,0,0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)

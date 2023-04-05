@@ -22,8 +22,9 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.menu = Menu("Press any key to start...", self.screen)
         self.running = False
-        self.death_count = 0
+        self.highest_score = 0
         self.score = 0
+        self.death_count = 0
 
         self.sound = pygame.mixer.music.load("xstep.ogg")
         pygame.mixer.music.play(-1)
@@ -68,6 +69,7 @@ class Game:
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.draw_score()
+        
         pygame.display.update()
         #pygame.display.flip()
 
@@ -84,22 +86,51 @@ class Game:
         half_screen_height = SCREEN_HEIGHT //2
         half_screen_widht = SCREEN_WIDTH //2
         self.menu.reset_screen_color(self.screen)
+        if self.score > self.highest_score:
+            self.highest_score = self.score
+        
+        #puntaje
+        score_font = pygame.font.Font(FONT_STYLE,30)
+        score_text = score_font.render(f"Score: {self.score}", True, (0,0,0))
+        score_text_rect = score_text.get_rect()
+        score_text_rect.center = (half_screen_widht, half_screen_height + 50)
+        self.screen.blit(score_text, score_text_rect)
+        
+        #mejor puntaje
+        highest_score_font = pygame.font.Font(FONT_STYLE,30)
+        highest_score_text = highest_score_font.render(f"Highest score: {self.highest_score}", True, (0,0,0))
+        highest_score_text_rect = highest_score_text.get_rect()
+        highest_score_text_rect.center = (half_screen_widht, half_screen_height + 100)
+        self.screen.blit(highest_score_text, highest_score_text_rect)
+
+        #numero de muertes
+        death_font= pygame.font.Font(FONT_STYLE, 30)
+        death_text = death_font.render(f"Total deaths: {self.death_count}", True, (0,0,0))
+        death_text_rect = death_text.get_rect()
+        death_text_rect.center = (half_screen_widht, half_screen_height + 150)
+        self.screen.blit(death_text, death_text_rect)
 
         if self.death_count == 0:
             self.menu.draw(self.screen)
-            
         else: 
-            self.menu.update_message("new message")
+            self.menu.update_message("Game over, Press any key to restart")
             self.menu.draw(self.screen)
-            
-        self.screen.blit(ICON, (half_screen_widht - 50, half_screen_height - 140))
+        self.screen.blit(ICON, (half_screen_widht - 50, half_screen_height - 130))
         self.menu.update(self)
-    
+           
+
     def update_score(self):
         self.score += 1
 
         if self.score % 100 == 0 and self.game_speed < 500:
             self.game_speed += 5
+
+    def max_score(self, update_score):
+        max_score = 0
+        max_score_actual = update_score
+        if max_score < max_score_actual:
+            max_score = max_score_actual
+        
 
     def draw_score(self):
         font = pygame.font.Font(FONT_STYLE, 30)
@@ -107,3 +138,5 @@ class Game:
         text_rect = text.get_rect()
         text_rect.center = (1000, 50)
         self.screen.blit(text, text_rect)
+
+    
