@@ -26,29 +26,39 @@ class Game:
         self.score = 0
         self.death_count = 0
 
-        self.sound = pygame.mixer.music.load("xstep.ogg")
-        pygame.mixer.music.play(-1)
+        self.game_over_sound = pygame.mixer.Sound("fallo.mp3")
+
+        
 
     def execute(self):
         self.running = True
         while self.running:
             if not self.playing:
                 self.show_menu()
+            
         pygame.display.quit()
         pygame.quit()
     
+
+
     def run(self):
         self.obstacle_manager.reset_obstacles()
         self.player.reset_dinosaur()
         self.score = 0
         self.game_speed = self.GAME_SPEED
         # Game loop: events - update - draw
+
+        #cargar la música
+        pygame.mixer.music.load("xstep.ogg")
+        pygame.mixer.music.play(-1)
+
         self.playing = True
         while self.playing:
             self.events()
             self.update()
             self.draw()
-            self.sound
+        pygame.mixer_music.stop()
+        self.show_menu()   
        
 
     def events(self):

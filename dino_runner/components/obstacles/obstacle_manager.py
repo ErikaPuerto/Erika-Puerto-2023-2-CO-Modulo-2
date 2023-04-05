@@ -33,6 +33,8 @@ class ObstacleManager:
                 pygame.time.delay(1000)
                 game.death_count += 1
                 game.playing = False
+                self.game_over_sound = pygame.mixer.Sound("fallo.mp3")
+                self.game_over_sound.play()
                 
 
     def draw(self, screen):
