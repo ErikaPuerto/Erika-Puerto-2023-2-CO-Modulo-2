@@ -7,7 +7,7 @@ class Counter:
   def __init__(self):
     self.count = 0
 
-  def update(self):
+  def update(self, game):
     self.count += 1
 
   def draw(self, screen):

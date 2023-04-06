@@ -1,6 +1,7 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, FONT_STYLE, DEFAULT_TYPE
+from dino_runner.components.cloud import Cloud
+from dino_runner.utils.constants import BG, ICON, GAME_OVER, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, FONT_STYLE, DEFAULT_TYPE
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.menu import Menu
@@ -9,6 +10,7 @@ from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 
 class Game:
     GAME_SPEED = 20
+    
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -23,11 +25,12 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.menu = Menu(self.screen)
         self.running = False
+        self.username = ""
         self.score = Counter()
         self.death_count = Counter()
         self.highest_score = Counter()
         self.power_up_manager = PowerUpManager()
-
+        self.cloud_group = pygame.sprite.Group()
 
         
 
@@ -39,7 +42,6 @@ class Game:
             
         pygame.display.quit()
         pygame.quit()
-    
 
 
     def run(self):
@@ -57,7 +59,6 @@ class Game:
             self.draw()
        pygame.mixer_music.stop()
        self.show_menu()   
-       
 
     def events(self):
         for event in pygame.event.get():
@@ -69,16 +70,25 @@ class Game:
         self.player.update(user_input)
         self.obstacle_manager.update(self)
         self.power_up_manager.update(self)
-        self.score.update()
-        self.update_game_speed()
+        self.score.update(self)
+        self.update_game_speed(self)
         
 
     def draw(self):
         self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255))
+        self.index = 0
+        if self.score.count < 500:
+            self.screen.fill((250, 250, 250))
+        elif self.score.count >= 1000:
+            self.screen.fill((250, 250, 250))
+        else:
+            self.screen.fill((150, 150, 150))
+
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
+        self.cloud_group.update()
+        self.cloud_group.draw(self.screen)
         self.power_up_manager.draw(self.screen)
         self.score.draw(self.screen)
         self.draw_power_up_time()
@@ -108,12 +118,13 @@ class Game:
             self.menu.draw(self.screen, f'Your score: {self.score.count}', half_screen_width, 350, )
             self.menu.draw(self.screen, f'Highest score: {self.highest_score.count}', half_screen_width, 400, )
             self.menu.draw(self.screen, f'Total deaths: {self.death_count.count}', half_screen_width, 450, )
-
+            self.screen.blit(GAME_OVER, (half_screen_width - 150, half_screen_height - 250))
         self.screen.blit(ICON, (half_screen_width - 50, half_screen_height - 140))
-
+        
         self.menu.update(self)
 
-    def update_game_speed(self):
+
+    def update_game_speed(self, power_up):        
         if self.score.count % 100 == 0 and self.game_speed < 500:
             self.game_speed += 5
 
@@ -137,5 +148,3 @@ class Game:
             else:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE 
-#implementar otro power up, diferente a shield, cambios extras los + posibles, 
-#1,40
