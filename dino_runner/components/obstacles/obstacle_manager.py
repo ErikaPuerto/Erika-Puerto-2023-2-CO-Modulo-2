@@ -29,17 +29,15 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                if game.player.type != SHIELD_TYPE:
+                if game.player.type not in [SHIELD_TYPE, HAMMER_TYPE]:
                     pygame.time.delay(1000)
                     game.death_count.update(self)
                     game.playing = False
                     self.game_over_sound = pygame.mixer.Sound("fallo.mp3")
-                    self.game_over_sound.play()
+                    self.game_over_sound.play()       
+
                 else:
                     self.obstacles.remove(obstacle)
-                
-                
-                
             
 
     def draw(self, screen):
